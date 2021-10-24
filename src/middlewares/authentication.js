@@ -1,13 +1,7 @@
-const { ObjectId } = require('bson');
-
-function getObjectId(stringId) {
-  try {
-    const objId = ObjectId(stringId);
-    return objId;
-  } catch {
-    return '';
-  }
-}
+const jwt = require('jsonwebtoken');
+const Database = require('../models/database');
+const { getObjectId } = require('../controllers/utils');
+const SECRET_JWT = process.env.SECRET_JWT || 'h@la123Cr@yola';
 
 function authentication(req, res, next) {
   const authHeader = req.get('Authorization');
@@ -32,6 +26,4 @@ function authentication(req, res, next) {
     });
 }
 
-module.exports = {
-  getObjectId,
-};
+module.exports = authentication;
