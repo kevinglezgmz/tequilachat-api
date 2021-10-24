@@ -51,7 +51,7 @@ router.get('/:userId', usersController.getUserById);
 
 /**
  * @swagger
- *   /api/users/register:
+ *   /api/users/:
  *     post:
  *       tags:
  *         - Users
