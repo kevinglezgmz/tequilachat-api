@@ -5,7 +5,7 @@ const { getObjectId, getRoomInviteLink } = require('./utils.js');
  * @typedef { import('./dataTypes').ChatHistory } ChatHistory
  */
 
-class ChatsController {
+class ChatRoomsController {
   static getAllChatRooms(req, res) {
     const chatRoomsDb = new Database('ChatRooms');
     chatRoomsDb
@@ -107,4 +107,4 @@ class ChatsController {
   }
 }
 
-module.exports = ChatsController;
+module.exports = ChatRoomsController;

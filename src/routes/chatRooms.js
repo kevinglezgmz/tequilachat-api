@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const chatRoomsController = require('../controllers/chatRooms.controller');
+const ChatRoomsController = require('../controllers/chatRooms.controller');
+const MessagesController = require('../controllers/messages.controller');
 const authentication = require('../middlewares/authentication');
 
 router.use(authentication);
@@ -19,7 +20,7 @@ router.use(authentication);
  *         500:
  *           description: An un expected error ocurred while trying to list the chatrooms
  */
-router.get('/', chatRoomsController.getAllChatRooms);
+router.get('/', ChatRoomsController.getAllChatRooms);
 
 /**
  * @swagger
@@ -57,7 +58,7 @@ router.get('/', chatRoomsController.getAllChatRooms);
  *         500:
  *           description: An un expected error ocurred while trying to create the chatroom
  */
-router.post('/', chatRoomsController.createNewChatRoom);
+router.post('/', ChatRoomsController.createNewChatRoom);
 
 /**
  * @swagger
@@ -80,6 +81,69 @@ router.post('/', chatRoomsController.createNewChatRoom);
  *         500:
  *           description: An un expected error ocurred while trying to find the specified chatroom
  */
-router.get('/invite/:inviteId', chatRoomsController.joinRoomWithInviteLink);
+router.get('/invite/:inviteId', ChatRoomsController.joinRoomWithInviteLink);
+
+/** Messages Routes */
+/**
+ * @swagger
+ *   /api/chatrooms/{roomId}/messages:
+ *     get:
+ *       tags:
+ *         - ChatRooms - Messages
+ *       description: Gets all the messages in a chatroom that the user is currently in
+ *       parameters:
+ *         - in: header
+ *           name: Authentication
+ *           type: string
+ *           required:
+ *             - Authentication
+ *       responses:
+ *         200:
+ *           description: Messages in the specified room
+ *         400:
+ *           description: Bad request, no messages on that room
+ *         403:
+ *           description: Unauthorized, you dont have access to see the messages in that room
+ *         500:
+ *           description: An un expected error ocurred while trying to find messages in the specified chat room
+ */
+router.get('/:roomId/messages', MessagesController.getAllMessagesInChatRoom);
+
+/**
+ * @swagger
+ *   /api/chatrooms/{roomId}/messages:
+ *     post:
+ *       tags:
+ *         - ChatRooms - Messages
+ *       description: Creates a new message in the specified chatroom if user is currently in the chatroom
+ *       parameters:
+ *         - in: header
+ *           name: Authentication
+ *           type: string
+ *           required:
+ *             - Authentication
+ *         - in: body
+ *           name: message
+ *           type: object
+ *           schema:
+ *             type: object
+ *             required:
+ *               - message
+ *             properties:
+ *               message:
+ *                 type: string
+ *           required:
+ *             - message
+ *       responses:
+ *         201:
+ *           description: The message was created succesfuly
+ *         400:
+ *           description: Bad request, no message content specified
+ *         403:
+ *           description: Unauthorized, you cant send messages in that room
+ *         500:
+ *           description: An un expected error ocurred while trying to create the message in the specified chatroom
+ */
+router.post('/:roomId/messages', MessagesController.createNewMessageInChatRoom);
 
 module.exports = router;
