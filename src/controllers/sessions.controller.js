@@ -61,7 +61,11 @@ class SessionsController {
     sessionsDb
       .deleteOne({ userId: getObjectId(req.userId) })
       .then((result) => {
-        res.send({ msg: 'Logged out successfuly' });
+        if (result.deletedCount > 0) {
+          res.send({ msg: 'Logged out successfuly' });
+        } else {
+          res.status(400).send({ err: 'You can not logout if you are not logged in' });
+        }
       })
       .catch((err) => {
         res.status(500).send(err);
