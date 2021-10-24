@@ -15,6 +15,7 @@ const PORT = process.env.PORT || 3000;
 
 /** Express and routers */
 const app = express();
+const mainRouter = require('./src/routes/index');
 
 /** Swagger configuration */
 const swaggerOptions = {
@@ -27,10 +28,16 @@ const swaggerOptions = {
       servers: ['http://localhost:' + PORT],
     },
   },
-  apis: ['./server.js'],
+  apis: ['./server.js', './src/routes/users.js'],
 };
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 app.use('/swagger-ui', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+
+/** Additional express middlewares */
+app.use(express.json());
+
+/** Use of routers */
+app.use('/api', mainRouter);
 
 /** Start application only if we can connect to the database */
 MongoClient.connect(
