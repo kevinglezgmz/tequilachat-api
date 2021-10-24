@@ -30,9 +30,24 @@ const authentication = require('../middlewares/authentication');
  *         400:
  *           description: No user account was found with that email and password combination
  *         500:
- *           description: An un expected error ocurred while login the user in
+ *           description: An un expected error ocurred while trying to login the user in
  */
 router.post('/login', sessionsController.loginUser);
 
+/**
+ * @swagger
+ *   /api/sessions/logout:
+ *     get:
+ *       tags:
+ *         - Sessions
+ *       description: Endpoint to log out an user
+ *       responses:
+ *         200:
+ *           description: Successfuly logged out the user
+ *         400:
+ *           description: You can not log out if you are not logged in
+ *         500:
+ *           description: An un expected error ocurred while trying to log out the user
+ */
 router.get('/logout', authentication, sessionsController.logoutUser);
 module.exports = router;
