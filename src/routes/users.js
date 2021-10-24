@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const usersController = require('../controllers/users.controller');
 
+const authentication = require('../middlewares/authentication');
+
 /**
  * @swagger
  *   /api/users/:
@@ -47,7 +49,7 @@ router.get('/', usersController.getAllUsers);
  *         500:
  *           description: An un expected error ocurred while retrieving the user's details
  */
-router.get('/:userId', usersController.getUserById);
+router.get('/:userId', authentication, usersController.getUserById);
 
 /**
  * @swagger
