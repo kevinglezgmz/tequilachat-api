@@ -9,29 +9,19 @@ function getObjectId(stringId) {
   }
 }
 
-function authentication(req, res, next) {
-  const authHeader = req.get('Authorization');
-  const authHeaderToken = authHeader ? authHeader.split(' ')[1] : undefined;
-  if (!authHeaderToken) {
-    res.status(401).send({ message: 'Not authorized' });
-  }
-  let token = jwt.verify(authHeaderToken, SECRET_JWT);
-  const sessionsDb = new Database('Sessions');
-  sessionsDb
-    .findOne({ userId: getObjectId(token._id) }, {})
-    .then((session) => {
-      if (!session || session.token !== authHeaderToken) {
-        res.status(401).send({ message: 'Not authorized' });
-        return;
-      }
-      req.userId = token._id;
-      next();
-    })
-    .catch(({ statusCode, msg }) => {
-      res.status(statusCode).send({ msg });
-    });
+function getRoomInviteLink(userId, roomName) {
+  const cipher = (salt) => {
+    const textToChars = (text) => text.split('').map((c) => c.charCodeAt(0));
+    const byteHex = (n) => ('0' + Number(n).toString(16)).substr(-2);
+    const applySaltToChar = (code) => textToChars(salt).reduce((a, b) => a ^ b, code);
+
+    return (text) => text.split('').map(textToChars).map(applySaltToChar).map(byteHex).join('');
+  };
+
+  return cipher('INV_LINK_GEN')(userId.concat(roomName));
 }
 
 module.exports = {
   getObjectId,
+  getRoomInviteLink,
 };

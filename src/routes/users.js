@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const usersController = require('../controllers/users.controller');
+const chatRoomsController = require('../controllers/chatRooms.controller');
 
 const authentication = require('../middlewares/authentication');
 
@@ -19,6 +20,35 @@ const authentication = require('../middlewares/authentication');
  *           description: An un expected error ocurred
  */
 router.get('/', usersController.getAllUsers);
+
+/**
+ * @swagger
+ *   /api/users/{userId}/chatrooms:
+ *     get:
+ *       tags:
+ *       - Users
+ *       description: Endpoint to get all the chatrooms that the user is currently in
+ *       parameters:
+ *         - in: header
+ *           name: Authorization
+ *           schema:
+ *             type: string
+ *           description: The bearer's token
+ *         - in: path
+ *           name: userId
+ *           required: true
+ *           schema:
+ *             type: integer
+ *           description: The user's unique id
+ *       responses:
+ *         200:
+ *           description: Success response with the rooms where the user is part of
+ *         400:
+ *           description: The user has not joined any chatrooms
+ *         500:
+ *           description: An un expected error ocurred
+ */
+router.get('/:userId/chatrooms', authentication, chatRoomsController.getAllUserChatRooms);
 
 /**
  * @swagger
