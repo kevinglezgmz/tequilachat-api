@@ -10,7 +10,13 @@ function authentication(req, res, next) {
     res.status(401).send({ message: 'Not authorized' });
     return;
   }
-  let token = jwt.verify(authHeaderToken, SECRET_JWT);
+  let token = undefined;
+  try {
+    token = jwt.verify(authHeaderToken, SECRET_JWT);
+  } catch (err) {
+    res.status(403).send({ message: 'Invalid token' });
+    return;
+  }
   const sessionsDb = new Database('Sessions');
   sessionsDb
     .findOne({ userId: getObjectId(token._id) }, {})
