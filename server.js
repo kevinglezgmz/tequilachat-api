@@ -17,6 +17,19 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 const mainRouter = require('./src/routes/index');
 
+/** Passport, strategies and sessions configuration */
+const passport = require('passport');
+const cookieSession = require('cookie-session');
+require('./src/middlewares/passport');
+app.use(
+  cookieSession({
+    name: 'google-auth-session',
+    keys: ['tempKey1', 'tempKey2'],
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
 /** Swagger configuration */
 const swaggerOptions = {
   swaggerDefinition: {

@@ -38,7 +38,7 @@ router.get('/', usersController.getAllUsers);
  *           name: userId
  *           required: true
  *           schema:
- *             type: integer
+ *             type: string
  *           description: The user's unique id
  *       responses:
  *         200:
@@ -69,7 +69,7 @@ router.get('/:userId/chatrooms', authentication, chatRoomsController.getAllUserC
  *           name: userId
  *           required: true
  *           schema:
- *             type: integer
+ *             type: string
  *           description: The user's unique id
  *       responses:
  *         200:

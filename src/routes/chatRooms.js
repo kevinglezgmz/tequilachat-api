@@ -11,7 +11,13 @@ router.use(authentication);
  *     get:
  *       tags:
  *         - ChatRooms
- *       description: Gets all the chatrooms in the database
+ *       description: Gets all the chatrooms in the database. For security reasons you need to login first before having access to all the rooms.
+ *       parameters:
+ *         - in: header
+ *           name: Authorization
+ *           type: string
+ *           required:
+ *             - Authorization
  *       responses:
  *         200:
  *           description: Chatrooms that have been created in the database
@@ -31,10 +37,10 @@ router.get('/', ChatRoomsController.getAllChatRooms);
  *       description: Create a new chatroom
  *       parameters:
  *         - in: header
- *           name: Authentication
+ *           name: Authorization
  *           type: string
  *           required:
- *             - Authentication
+ *             - Authorization
  *         - in: body
  *           name: roomDetails
  *           type: object
@@ -69,10 +75,10 @@ router.post('/', ChatRoomsController.createNewChatRoom);
  *       description: Joins the user to the specified chatroom
  *       parameters:
  *         - in: header
- *           name: Authentication
+ *           name: Authorization
  *           type: string
  *           required:
- *             - Authentication
+ *             - Authorization
  *       responses:
  *         200:
  *           description: Succesfuly joined to the chatroom associated with that invite link
@@ -93,10 +99,16 @@ router.get('/invite/:inviteId', ChatRoomsController.joinRoomWithInviteLink);
  *       description: Gets all the messages in a chatroom that the user is currently in
  *       parameters:
  *         - in: header
- *           name: Authentication
+ *           name: Authorization
  *           type: string
  *           required:
- *             - Authentication
+ *             - Authorization
+ *         - in: path
+ *           name: roomId
+ *           required: true
+ *           schema:
+ *             type: integer
+ *           description: The room that you want the messages from
  *       responses:
  *         200:
  *           description: Messages in the specified room
@@ -118,10 +130,16 @@ router.get('/:roomId/messages', MessagesController.getAllMessagesInChatRoom);
  *       description: Creates a new message in the specified chatroom if user is currently in the chatroom
  *       parameters:
  *         - in: header
- *           name: Authentication
+ *           name: Authorization
  *           type: string
  *           required:
- *             - Authentication
+ *             - Authorization
+ *         - in: path
+ *           name: roomId
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: The room that you want to send a message to
  *         - in: body
  *           name: message
  *           type: object
