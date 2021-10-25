@@ -8,6 +8,7 @@ function authentication(req, res, next) {
   const authHeaderToken = authHeader ? authHeader.split(' ')[1] : undefined;
   if (!authHeaderToken) {
     res.status(401).send({ message: 'Not authorized' });
+    return;
   }
   let token = jwt.verify(authHeaderToken, SECRET_JWT);
   const sessionsDb = new Database('Sessions');

@@ -50,6 +50,9 @@ class UsersController {
       userData.password = userData.password1;
       delete userData.password1;
       delete userData.password2;
+    } else {
+      res.status(400).send({ err: 'Passwords do not match' });
+      return;
     }
     let hash = bcrypt.hashSync(userData.password, 10);
     userData.password = hash;
